@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>{% block title %}Camp Form{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+{% endblock %}
+
+{% block content %}
+    <form id="Public_Tent_Form" class="public_form">
+        <label for="Group_Name">Group Name:</label><br>
+        <input type="text" id="Group_Name" name="Group_Name" required><br>
+        <label for="nation">Nation:</label><br>
+        <select id="nation" name="nation" required>
+            <option value="" selected disabled>Select your nation</option>
+            <option value="Avereaux">Avereaux</option>
+            <option value="Wonder">Wonder</option>
+            <option value="Valdraeth">Valdraeth</option>
+            <option value="Urdrevan">Urdrevan</option>
+            <option value="Portavas">Portavas</option>
+            <option value="Hammerstadt">Hammerstadt</option>
+            <option value="Kairos">Kairos</option>
+            <option value="Syradonia">Syradonia</option>
+            <option value="Morvalis">Morvalis</option>
+        </select>
+
+        <div id="tents">
+
+        </div>
+        <input type="hidden" id="tentCount" required>
+
+        <button type="button" onclick="add_bell_tent()">Add Bell Tent</button>
+        <button type="button" onclick="add_rectangle_tent()">Add Rectangle Tent/Awning</button>
+        <input type="hidden" id="project_id" value="{{ project_id }}">
+        <button type="submit" id="submitBtn" disabled>Submit</button>
+    </form>
+
+    <div id="successMessage" class="alert alert-success d-none mt-3">
+        Your tent request has been submitted successfully.
+    </div>
+
+<script>
+document.getElementById("Public_Tent_Form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Stops page refresh
+
+    const formData = new FormData(this);
+
+    for (const [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+});
+</script>
+
+<script src="static/public_tent_form.js"></script>
+
+
+{% endblock %}
+
+

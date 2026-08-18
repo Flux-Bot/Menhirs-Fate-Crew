@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block topbar %}{% endblock %}
+
+{% block header %}
+    <title>{% block title %}Camp Plan (Public View){% endblock %}</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+
+    <style>
+        /* Ensure the map fills the viewport on mobile */
+        #map { height: calc(100vh - 60px); }
+        .public-top { padding: 10px; text-align: center; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="public-top">
+        <h4>{{ map_data[0].project_name if map_data and map_data[0] else 'Camp Plan' }}</h4>
+        <button id="locBtn" class="btn btn-primary">Show my location</button>
+        <div id="areasLegend" style="margin-top:8px"></div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="map-sidebar col-12 col-md-3 col-lg-2 bg-light border-top border-md-end order-2 order-md-0">
+                <div class="p-3">
+                    <h5>Tents</h5>
+                    <input type="text" id="tentSearch"
+                        class="form-control mb-3"
+                        placeholder="Search name or Tent ID...">
+                    <div id="tentSidebar"></div>
+                </div>
+            </aside>
+
+            <main class="col-12 col-md-9 col-lg-10 p-0 order-1">
+                <script>
+                    const projectData = {{ map_data|tojson }};
+                    const tentDataFromDb = {{ tent_data|tojson }};
+                    window.areasFromDb = {{ areas_data|tojson }};
+                    // Mark global flag for map.js to use
+                    window.PUBLIC_VIEW = true;
+                </script>
+
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+                crossorigin=""></script>
+
+                <div id="map"></div>
+
+                <script src="static/map.js"></script>
+
+                <script>
+                    // Show user location on demand
+                    document.getElementById('locBtn').addEventListener('click', function() {
+                        if (!navigator.geolocation) {
+                            alert('Geolocation is not supported by your browser');
+                            return;
+                        }
+
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+
+                            if (window.userLocationMarker) {
+                                window.userLocationMarker.setLatLng([lat, lng]);
+                            } else {
+                                window.userLocationMarker = L.marker([lat, lng], { title: 'Your location' }).addTo(window.map || window._mapReference);
+                            }
+
+                            // center map on user
+                            if (window.map) {
+                                window.map.setView([lat, lng], 18);
+                            }
+                        }, function(err) {
+                            alert('Unable to get your location: ' + err.message);
+                        }, { enableHighAccuracy: true });
+                    });
+                </script>
+
+            </main>
+        </div>
+    </div>
+{% endblock %}

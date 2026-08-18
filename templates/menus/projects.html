@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>{% block title %}Projects{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+{% endblock %}
+
+{% block content %}
+
+    <button onclick="New_Project()">New Project</button>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for item in list_Of_Projects %}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.project_name }}</h5>
+                    <p class="card-text">Project Owner: {{ item.project_owner }} <br>Project ID: {{ item.project_id }}</p>
+                    <a href="/Camp-Plan?project_id={{ item.project_id }}" class="btn btn-primary">Go To Project</a>
+
+                    <div class="form-check form-switch">
+                        <input class="form-check-input project-toggle"
+                            type="checkbox"
+                            data-project-id="{{ item.project_id }}"
+                            data-field="public_form_visible"
+                            {% if item.public_form_visible %}checked{% endif %}>
+                        <label class="form-check-label">Enable camp plan form</label>
+                    </div>
+
+                    <div class="form-check form-switch">
+                        <input class="form-check-input project-toggle"
+                            type="checkbox"
+                            data-project-id="{{ item.project_id }}"
+                            data-field="public_view_visible"
+                            {% if item.public_view_visible %}checked{% endif %}>
+                        <label class="form-check-label">Enable public view</label>
+                    </div>
+
+                    <a href="/Camp-Form?project_id={{ item.project_id }}" class="btn btn-primary">Public Tent Submision Form</a>
+
+                    {% if item.public_view_visible %}
+                        <button class="btn btn-outline-secondary btn-sm copy-public-link" data-project-id="{{ item.project_id }}">Copy public view link</button>
+                    {% else %}
+                        <button class="btn btn-outline-secondary btn-sm" disabled title="Enable public view to allow sharing">Public view disabled</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <!-- New Project Generator -->
+    <div class="New_Project hidden">
+        <form method="POST" id="projectForm">
+            <input type="text" name="project_name" placeholder="Project Name" required>
+
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <input type="hidden" id="zoom" name="zoom">
+            
+            <button type="submit">Create Project</button>
+        </form>
+
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="">
+        </script>
+        <div id="map" style="height: 500px;"></div>
+
+        <script src="static/mapDefault.js"></script>
+    </div>
+
+    <script src="static/projects.js"></script>
+
+<script>
+// Copy public view link buttons
+document.querySelectorAll('.copy-public-link').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const projectId = this.getAttribute('data-project-id');
+        const url = `${location.origin}/Camp-Plan-Public?project_id=${projectId}`;
+        navigator.clipboard.writeText(url).then(function() {
+            alert('Public view link copied to clipboard');
+        }).catch(function() {
+            alert('Failed to copy link.');
+        });
+    });
+});
+</script>
+
+{% endblock %}
+
+

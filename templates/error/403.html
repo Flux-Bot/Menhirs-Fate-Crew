@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>{% block title %}404{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Oops 403 - Insufficient Permissions</h1>
+    <p>You will have to do a weaving. We cannot find that page...</p>
+    <p>If you belive you should have access please reach out to Mark</p>
+
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>{% block title %}Home{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Thank You Dead Crew!</h1>
+    <p>If you have reached this page it means you are ether a member of the Menhirs Fate Crew or have stummbled across this page.<br>Please note this is a crew only resorce. If you need access please contact Mark.</p>
+    <a href="/Login" class="btn btn-primary">Login with Discord</a>
+
+{% endblock %}
+
+
