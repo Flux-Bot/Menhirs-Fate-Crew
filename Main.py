@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, make_response, abort, g
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv()
 
@@ -18,8 +19,11 @@ app.config.update(
     SECRET_KEY=get_required_env("FLASK_SECRET_KEY"),
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=not app.debug,
+    SESSION_COOKIE_SECURE=False,
+    PERMANENT_SESSION_LIFETIME=86400,
 )
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1, x_port=1)
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 supabase: Client = create_client(
     get_required_env("SUPABASE_URL"),
@@ -556,8 +560,13 @@ def debug():
         "supabase_user": str(user),
         "has_access_token": "access_token" in session,
         "has_refresh_token": "refresh_token" in session,
+        "host_url": request.host_url,
+        "url_root": request.url_root,
+        "base_url": request.base_url,
+        "scheme": request.scheme,
+        "host": request.host,
     }
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=3000, debug=True)
+    app.run(debug=False)
