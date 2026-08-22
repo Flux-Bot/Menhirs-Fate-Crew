@@ -11,11 +11,34 @@ function New_Project() {
 }
 
 
+function updateLinkButtonState(card) {
+    const publicFormToggle = card.querySelector('[data-field="public_form_visible"]');
+    const publicFormLink = card.querySelector('.copy-form-link');
+    const publicFormDisabled = card.querySelector('.copy-form-link-disabled');
+
+    if (publicFormToggle && publicFormLink && publicFormDisabled) {
+        const enabled = publicFormToggle.checked;
+        publicFormLink.classList.toggle('d-none', !enabled);
+        publicFormDisabled.classList.toggle('d-none', enabled);
+    }
+
+    const publicViewToggle = card.querySelector('[data-field="public_view_visible"]');
+    const publicViewLink = card.querySelector('.copy-public-link');
+    const publicViewDisabled = card.querySelector('.public-view-disabled');
+
+    if (publicViewToggle && publicViewLink && publicViewDisabled) {
+        const enabled = publicViewToggle.checked;
+        publicViewLink.classList.toggle('d-none', !enabled);
+        publicViewDisabled.classList.toggle('d-none', enabled);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.card').forEach(card => updateLinkButtonState(card));
 
     document.querySelectorAll('.project-toggle').forEach(toggle => {
-
         toggle.addEventListener('change', async function () {
+            updateLinkButtonState(this.closest('.card'));
 
             try {
                 const response = await fetch('/update-project-toggle', {

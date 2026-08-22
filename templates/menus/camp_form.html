@@ -9,36 +9,72 @@
 {% endblock %}
 
 {% block content %}
-    <form id="Public_Tent_Form" class="public_form">
-        <label for="Group_Name">Group Name:</label><br>
-        <input type="text" id="Group_Name" name="Group_Name" required><br>
-        <label for="nation">Nation:</label><br>
-        <select id="nation" name="nation" required>
-            <option value="" selected disabled>Select your nation</option>
-            <option value="Avereaux">Avereaux</option>
-            <option value="Wonder">Wonder</option>
-            <option value="Valdraeth">Valdraeth</option>
-            <option value="Urdrevan">Urdrevan</option>
-            <option value="Portavas">Portavas</option>
-            <option value="Hammerstadt">Hammerstadt</option>
-            <option value="Kairos">Kairos</option>
-            <option value="Syradonia">Syradonia</option>
-            <option value="Morvalis">Morvalis</option>
-        </select>
+    <div class="d-flex justify-content-center">
+        <div class="container py-4">
+    <div class="tent-form-wrapper">
 
-        <div id="tents">
+        <h2 class="form-title">Camp Booking Request</h2>
+        <p class="form-subtitle">
+            Enter your group details and add the tents required for your camp.
+        </p>
 
+        <form id="Public_Tent_Form" class="public_form">
+
+            <div class="mb-3">
+                <label for="Group_Name" class="form-label">Group Name</label>
+                <input class="form-control" type="text" id="Group_Name" name="Group_Name" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="nation" class="form-label">Nation</label>
+                <select class="form-control" id="nation" name="nation" required>
+                    <option value="" selected disabled>Select your nation</option>
+                    <option value="Avereaux">Avereaux</option>
+                    <option value="Wonder">Wonder</option>
+                    <option value="Valdraeth">Valdraeth</option>
+                    <option value="Urdrevan">Urdrevan</option>
+                    <option value="Portavas">Portavas</option>
+                    <option value="Hammerstadt">Hammerstadt</option>
+                    <option value="Kairos">Kairos</option>
+                    <option value="Syradonia">Syradonia</option>
+                    <option value="Morvalis">Morvalis</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <h4 class="mb-3">Tents</h4>
+
+            <div id="tents"></div>
+
+            <input type="hidden" id="tentCount" required>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                <button class="btn btn-secondary" type="button" onclick="add_bell_tent()">
+                    Add Bell Tent
+                </button>
+
+                <button class="btn btn-secondary" type="button" onclick="add_rectangle_tent()">
+                    Add Rectangle Tent / Awning
+                </button>
+            </div>
+
+            <input type="hidden" id="project_id" value="{{ project_id }}">
+
+            <div class="mt-4">
+                <button class="btn btn-primary w-100" type="submit" id="submitBtn" disabled>
+                    Submit Request
+                </button>
+            </div>
+
+        </form>
+
+        <div id="successMessage" class="alert alert-success d-none mt-3">
+            Your tent request has been submitted successfully.
         </div>
-        <input type="hidden" id="tentCount" required>
 
-        <button type="button" onclick="add_bell_tent()">Add Bell Tent</button>
-        <button type="button" onclick="add_rectangle_tent()">Add Rectangle Tent/Awning</button>
-        <input type="hidden" id="project_id" value="{{ project_id }}">
-        <button type="submit" id="submitBtn" disabled>Submit</button>
-    </form>
-
-    <div id="successMessage" class="alert alert-success d-none mt-3">
-        Your tent request has been submitted successfully.
+    </div>
+</div>
     </div>
 
 <script>
