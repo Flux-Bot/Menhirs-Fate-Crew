@@ -30,6 +30,9 @@
                         <label class="form-check-label">Enable camp plan form</label>
                     </div>
 
+                    <button class="btn btn-outline-secondary btn-sm copy-form-link {% if not item.public_form_visible %}d-none{% endif %}" data-project-id="{{ item.project_id }}">Copy camp plan form link</button>
+                    <button class="btn btn-outline-secondary btn-sm copy-form-link-disabled {% if item.public_form_visible %}d-none{% endif %}" disabled title="Enable camp plan form to allow sharing">Camp plan form disabled</button>
+
                     <div class="form-check form-switch">
                         <input class="form-check-input project-toggle"
                             type="checkbox"
@@ -39,13 +42,8 @@
                         <label class="form-check-label">Enable public view</label>
                     </div>
 
-                    <a href="/Camp-Form?project_id={{ item.project_id }}" class="btn btn-primary">Public Tent Submision Form</a>
-
-                    {% if item.public_view_visible %}
-                        <button class="btn btn-outline-secondary btn-sm copy-public-link" data-project-id="{{ item.project_id }}">Copy public view link</button>
-                    {% else %}
-                        <button class="btn btn-outline-secondary btn-sm" disabled title="Enable public view to allow sharing">Public view disabled</button>
-                    {% endif %}
+                    <button class="btn btn-outline-secondary btn-sm copy-public-link {% if not item.public_view_visible %}d-none{% endif %}" data-project-id="{{ item.project_id }}">Copy public view link</button>
+                    <button class="btn btn-outline-secondary btn-sm public-view-disabled {% if item.public_view_visible %}d-none{% endif %}" disabled title="Enable public view to allow sharing">Public view disabled</button>
                 </div>
             </div>
         </div>
@@ -77,16 +75,25 @@
     <script src="static/projects.js"></script>
 
 <script>
-// Copy public view link buttons
+function copyProjectLinkUrl(button, urlPath, successMessage) {
+    const projectId = button.getAttribute('data-project-id');
+    const url = `${location.origin}${urlPath}?project_id=${projectId}`;
+    navigator.clipboard.writeText(url).then(function() {
+        alert(successMessage);
+    }).catch(function() {
+        alert('Failed to copy link.');
+    });
+}
+
+document.querySelectorAll('.copy-form-link').forEach(btn => {
+    btn.addEventListener('click', function() {
+        copyProjectLinkUrl(this, '/Camp-Form', 'Camp plan form link copied to clipboard');
+    });
+});
+
 document.querySelectorAll('.copy-public-link').forEach(btn => {
     btn.addEventListener('click', function() {
-        const projectId = this.getAttribute('data-project-id');
-        const url = `${location.origin}/Camp-Plan-Public?project_id=${projectId}`;
-        navigator.clipboard.writeText(url).then(function() {
-            alert('Public view link copied to clipboard');
-        }).catch(function() {
-            alert('Failed to copy link.');
-        });
+        copyProjectLinkUrl(this, '/Camp-Plan-Public', 'Public view link copied to clipboard');
     });
 });
 </script>

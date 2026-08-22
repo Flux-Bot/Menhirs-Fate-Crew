@@ -1,40 +1,125 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} - Menhirs Camp Plan</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-{% block topbar %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <h2>Menhirs Fate - Crew</h2>
-      {% if g.user %}
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('Projects') }}">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('Logout') }}">Log Out</a></li>
-      {% else %}
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('Home') }}">Home</a></li>
-      {% endif %}
-    </ul>
-
-    {% if g.user %}
-      <div class="d-flex align-items-center">
-        <span class="navbar-text">{{ g.user.username }}</span>
-        {% if g.user.avatar_url %}
-          <img src="{{ g.user.avatar_url }}" alt="avatar" style="width:32px;height:32px;border-radius:50%;margin-right:8px;" />
-        {% endif %}
-      </div>
-    {% endif %}
-  </div>
-</nav>
-{% endblock %}
 <section class="content">
   <header>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     {% block header %}{% endblock %}
   </header>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
+
+  <body>
+    {% block topbar %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <a class="navbar-brand me-3" href="/">
+          <img width="120" height="65" src="https://www.menhirsfate.com/wp-content/uploads/2024/08/white-logo-scaled-120x65.png" alt="Menhirs Fate">
+        </a>
+
+        <div class="d-none d-lg-flex align-items-center">
+          {% if g.user %}
+            <ul class="navbar-nav flex-row align-items-center mb-0">
+              <li class="nav-item text-white"><a class="nav-link" href="{{ url_for('Projects') }}">Projects</a></li>
+              <li class="nav-item text-white"><a class="nav-link" href="{{ url_for('Logout') }}">Log Out</a></li>
+            </ul>
+          {% else %}
+            <ul class="navbar-nav flex-row align-items-center mb-0">
+              <li class="nav-item text-white"><a class="nav-link" href="{{ url_for('Home') }}">Home</a></li>
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if g.user %}
+        <div class="d-none d-lg-flex align-items-center ms-auto">
+          <span class="navbar-text text-white navbar-username">{{ g.user.username }}</span>
+          {% if g.user.avatar_url %}
+            <img src="{{ g.user.avatar_url }}" alt="avatar" style="width:32px;height:32px;border-radius:50%;margin-right:8px;" />
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <button class="navbar-toggler d-lg-none ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+</nav>
+
+<div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="mobileNavOffcanvas" aria-labelledby="mobileNavOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="mobileNavOffcanvasLabel">Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="navbar-nav mb-3">
+        {% if g.user %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('Projects') }}">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('Logout') }}">Log Out</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('Home') }}">Home</a></li>
+        {% endif %}
+      </ul>
+
+      {% if g.user %}
+        <div id="mobileNavUserProfile" class="d-flex align-items-center text-white">
+          <span class="navbar-text me-2">{{ g.user.username }}</span>
+          {% if g.user.avatar_url %}
+            <img src="{{ g.user.avatar_url }}" alt="avatar" style="width:32px;height:32px;border-radius:50%;" />
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+<script>
+function syncMapSidebarForMobile() {
+      const offcanvasBody = document.querySelector('#mobileNavOffcanvas .offcanvas-body');
+      const userProfile = document.querySelector('#mobileNavUserProfile');
+      const sidebar = document.querySelector('.map-sidebar');
+
+      if (!offcanvasBody || !sidebar) {
+          return;
+      }
+
+      if (window.innerWidth < 992) {
+          if (!sidebar._originalParent) {
+              sidebar._originalParent = sidebar.parentNode;
+              sidebar._originalNextSibling = sidebar.nextElementSibling;
+          }
+
+          if (sidebar.parentNode !== offcanvasBody) {
+              const insertTarget = userProfile ? userProfile : null;
+              offcanvasBody.insertBefore(sidebar, insertTarget ? insertTarget.nextElementSibling : null);
+              sidebar.classList.add('mobile-offcanvas-sidebar');
+          }
+
+          return;
+      }
+
+      if (sidebar._originalParent && sidebar.parentNode === offcanvasBody) {
+          if (sidebar._originalNextSibling) {
+              sidebar._originalParent.insertBefore(sidebar, sidebar._originalNextSibling);
+          } else {
+              sidebar._originalParent.appendChild(sidebar);
+          }
+          sidebar.classList.remove('mobile-offcanvas-sidebar');
+      }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+      syncMapSidebarForMobile();
+      window.addEventListener('resize', syncMapSidebarForMobile);
+});
+</script>
+
   {% block content %}{% endblock %}
+
+  </body>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </section>
