@@ -10,14 +10,29 @@ function removeTent(button) {
 
 function add_bell_tent() {
     const tentsDiv = document.getElementById("tents");
+
     const newTent = document.createElement("div");
+    newTent.className = "tent tent-card";
+    newTent.dataset.type = "bell";
 
     newTent.innerHTML = `
-        <div class="tent" data-type="bell">
-            <label>Bell Tent Size (Meters):</label>
-            <input type="number" class="bell-size" required>
-            <button type="button" onclick="removeTent(this)">Delete</button>
+        <h5 class="mb-3">Bell Tent</h5>
+
+        <div class="mb-3">
+            <label class="form-label">Size (Meters)</label>
+            <input
+                type="number"
+                class="form-control bell-size"
+                min="1"
+                required>
         </div>
+
+        <button
+            type="button"
+            class="btn btn-outline-danger"
+            onclick="removeTent(this)">
+            Delete Tent
+        </button>
     `;
 
     tentsDiv.appendChild(newTent);
@@ -26,17 +41,40 @@ function add_bell_tent() {
 
 function add_rectangle_tent() {
     const tentsDiv = document.getElementById("tents");
+
     const newTent = document.createElement("div");
+    newTent.className = "tent tent-card";
+    newTent.dataset.type = "rectangle";
 
     newTent.innerHTML = `
-        <div class="tent" data-type="rectangle">
-            <p>Rectangle Tent/Awning</p>
-            <label>Length (Meters):</label>
-            <input type="number" class="length" required><br>
-            <label>Width (Meters):</label>
-            <input type="number" class="width" required>
-            <button type="button" onclick="removeTent(this)">Delete</button>
+        <h5 class="mb-3">Rectangle Tent / Awning</h5>
+
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label">Length (Meters)</label>
+                <input
+                    type="number"
+                    class="form-control length"
+                    min="1"
+                    required>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label">Width (Meters)</label>
+                <input
+                    type="number"
+                    class="form-control width"
+                    min="1"
+                    required>
+            </div>
         </div>
+
+        <button
+            type="button"
+            class="btn btn-outline-danger"
+            onclick="removeTent(this)">
+            Delete Tent
+        </button>
     `;
 
     tentsDiv.appendChild(newTent);

@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <aside class="map-sidebar col-12 col-md-3 col-lg-2 bg-light border-top border-md-end order-2 order-md-0">
+            <aside class="map-sidebar col-12 col-md-3 col-lg-2 bg-dark border-top border-md-end order-2 order-md-0">
                 <div class="p-3">
                     <h5>Tents</h5>
                     <input type="text" id="tentSearch"
@@ -21,7 +21,7 @@
 
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" value="" id="filterUnplaced">
-                        <label class="form-check-label" for="filterUnplaced">
+                        <label class="form-check-label text-light" for="filterUnplaced">
                             Show Unplaced
                         </label>
                     </div>
@@ -33,66 +33,142 @@
             <!-- Main Content -->
             <main class="col-12 col-md-9 col-lg-10 p-0 order-1">
                 <!-- Topbar -->
-                <div class="Map-Topbar">
-                    <form method="POST" id="Add_Tent">
-                        <label for="Group_Name">Group Name</label>
-                        <input type="text" id="Group_Name">
-                        <label for="Area">Area</label>
-                        <select id="Area" name="Area">
-                            <option value="null" selected></option>
-                            <option value="Avereaux">Avereaux</option>
-                            <option value="Wonder">Wonder</option>
-                            <option value="Valdraeth">Valdraeth</option>
-                            <option value="Urdrevan">Urdrevan</option>
-                            <option value="Portavas">Portavas</option>
-                            <option value="Hammerstadt">Hammerstadt</option>
-                            <option value="Kairos">Kairos</option>
-                            <option value="Syradonia">Syradonia</option>
-                            <option value="Morvalis">Morvalis</option>
-                            <option value="Crew">Crew</option>
-                            <option value="Guilds">Guilds</option>
-                            <option value="Traders">Traders</option>
-                        </select><br>
-                        <label for="Bell_Size">Bell Tent Size</label>
-                        <input type="number" id="Bell_Size" value="">
-                        <label>M</label>
-                        <label for="Four_Sided_Tent">Four-sided Tent</label>
-                        <input type="number" id="Tent_Length">
-                        <label>L</label>
-                        <input type="number" id="Tent_Width">
-                        <Label>W</Label>
-                        <input type="range" id="Tent_Rotation" min="0" max="365" value="0" oninput="this.nextElementSibling.value = this.value">
-                        <output>0</output>
-                        <label>°</label>
-                        <input type="button" id="addTentBtn" value="Add">
-                        <input type="button" id="updateTentBtn" value="Update">
-                        <input type="button" id="deleteTentBtn" value="Delete">
-                    </form>
+<div class="Map-Topbar border-bottom bg-white shadow-sm">
+    <div class="container-fluid py-2">
 
-                    <!-- Area drawing controls -->
-                    <div style="display:inline-block; margin-left:16px; vertical-align:top;">
-                        <label for="AreaNameForDraw">Draw Area for:</label>
-                        <select id="AreaNameForDraw">
-                            <option value="Avereaux">Avereaux</option>
-                            <option value="Wonder">Wonder</option>
-                            <option value="Valdraeth">Valdraeth</option>
-                            <option value="Urdrevan">Urdrevan</option>
-                            <option value="Portavas">Portavas</option>
-                            <option value="Hammerstadt">Hammerstadt</option>
-                            <option value="Kairos">Kairos</option>
-                            <option value="Syradonia">Syradonia</option>
-                            <option value="Morvalis">Morvalis</option>
-                            <option value="Crew">Crew</option>
-                            <option value="Guilds">Guilds</option>
-                            <option value="Traders">Traders</option>
-                        </select>
-                        <button id="startAreaDraw" class="btn btn-sm btn-outline-primary">Start Area Draw</button>
-                        <button id="finishAreaDraw" class="btn btn-sm btn-success" disabled>Finish Area</button>
-                        <button id="cancelAreaDraw" class="btn btn-sm btn-secondary" disabled>Cancel</button>
-                        <button id="deleteSelectedArea" class="btn btn-sm btn-danger" disabled>Delete Selected Area</button>
-                        <div id="areasLegend" style="margin-top:8px"></div>
-                    </div>
-                </div>
+        <!-- Row 1 -->
+        <form method="POST" id="Add_Tent"
+              class="d-flex flex-wrap align-items-center gap-2 mb-2">
+
+            <input
+                type="text"
+                id="Group_Name"
+                class="form-control form-control-sm toolbar-group"
+                placeholder="Group Name">
+
+            <select
+                id="Area"
+                name="Area"
+                class="form-select form-select-sm toolbar-area">
+                <option value="null" selected>Area</option>
+                <option value="Avereaux">Avereaux</option>
+                <option value="Wonder">Wonder</option>
+                <option value="Valdraeth">Valdraeth</option>
+                <option value="Urdrevan">Urdrevan</option>
+                <option value="Portavas">Portavas</option>
+                <option value="Hammerstadt">Hammerstadt</option>
+                <option value="Kairos">Kairos</option>
+                <option value="Syradonia">Syradonia</option>
+                <option value="Morvalis">Morvalis</option>
+                <option value="Crew">Crew</option>
+                <option value="Guilds">Guilds</option>
+                <option value="Traders">Traders</option>
+            </select>
+
+            <input type="number"
+                id="Bell_Size"
+                class="form-control form-control-sm toolbar-number"
+                placeholder="Bell Radius">
+
+            <div class="vr d-none d-md-block"></div>
+
+            <input type="number"
+                id="Tent_Length"
+                class="form-control form-control-sm toolbar-number"
+                placeholder="Length">
+
+            <input type="number"
+                id="Tent_Width"
+                class="form-control form-control-sm toolbar-number"
+                placeholder="Width">
+
+            <div class="d-flex align-items-center gap-2 toolbar-rotation">
+                <small class="text-muted">Rot</small>
+
+                <input
+                    type="range"
+                    id="Tent_Rotation"
+                    min="0"
+                    max="365"
+                    value="0"
+                    class="form-range m-0"
+                    oninput="this.nextElementSibling.value = this.value">
+
+                <output class="badge bg-secondary">0</output>
+            </div>
+
+            <div class="btn-group">
+                <input type="button"
+                       id="addTentBtn"
+                       value="Add"
+                       class="btn btn-sm btn-primary">
+
+                <input type="button"
+                       id="updateTentBtn"
+                       value="Update"
+                       class="btn btn-sm btn-warning">
+
+                <input type="button"
+                       id="deleteTentBtn"
+                       value="Delete"
+                       class="btn btn-sm btn-danger">
+            </div>
+
+        </form>
+
+        <!-- Row 2 -->
+        <div class="d-flex flex-wrap align-items-center gap-2">
+
+            <select
+                id="AreaNameForDraw"
+                class="form-select form-select-sm toolbar-area">
+                <option value="Avereaux">Avereaux</option>
+                <option value="Wonder">Wonder</option>
+                <option value="Valdraeth">Valdraeth</option>
+                <option value="Urdrevan">Urdrevan</option>
+                <option value="Portavas">Portavas</option>
+                <option value="Hammerstadt">Hammerstadt</option>
+                <option value="Kairos">Kairos</option>
+                <option value="Syradonia">Syradonia</option>
+                <option value="Morvalis">Morvalis</option>
+                <option value="Crew">Crew</option>
+                <option value="Guilds">Guilds</option>
+                <option value="Traders">Traders</option>
+            </select>
+
+            <button id="startAreaDraw"
+                    class="btn btn-sm btn-outline-primary">
+                Start Draw
+            </button>
+
+            <button id="finishAreaDraw"
+                    class="btn btn-sm btn-success"
+                    disabled>
+                Finish
+            </button>
+
+            <button id="cancelAreaDraw"
+                    class="btn btn-sm btn-secondary"
+                    disabled>
+                Cancel
+            </button>
+
+            <button id="deleteSelectedArea"
+                    class="btn btn-sm btn-danger"
+                    disabled>
+                Delete Area
+            </button>
+
+            <div id="areasLegend"
+                 class="ms-lg-auto small d-none d-md-flex flex-wrap gap-2">
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+                
                 <!-- Map -->
                 <script>
                     const projectData = {{ map_data|tojson }};

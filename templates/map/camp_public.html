@@ -13,18 +13,30 @@
         /* Ensure the map fills the viewport on mobile */
         #map { height: calc(100vh - 60px); }
         .public-top { padding: 10px; text-align: center; }
+        .public-top .btn-row { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
     </style>
 {% endblock %}
 
 {% block content %}
     <div class="public-top">
         <h4>{{ map_data[0].project_name if map_data and map_data[0] else 'Camp Plan' }}</h4>
-        <button id="locBtn" class="btn btn-primary">Show my location</button>
+        <div class="btn-row">
+            <button id="locBtn" class="btn btn-primary">Show my location</button>
+            <button class="btn btn-outline-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#publicTentSidebarOffcanvas" aria-controls="publicTentSidebarOffcanvas">Open tents</button>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="publicTentSidebarOffcanvas" aria-labelledby="publicTentSidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="publicTentSidebarOffcanvasLabel">Tent list</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body"></div>
     </div>
 
     <div class="container-fluid">
         <div class="row">
-            <aside class="map-sidebar col-12 col-md-3 col-lg-2 bg-light border-top border-md-end order-2 order-md-0">
+            <aside class="public-map-sidebar map-sidebar col-12 col-md-3 col-lg-2 bg-light border-top border-md-end order-2 order-md-0">
                 <div class="p-3">
                     <h5>Tents</h5>
                     <input type="text" id="tentSearch"
@@ -51,6 +63,43 @@
                 <script src="static/map.js"></script>
 
                 <script>
+                    function syncPublicSidebarForMobile() {
+                        const sidebar = document.querySelector('.public-map-sidebar');
+                        const offcanvasBody = document.querySelector('#publicTentSidebarOffcanvas .offcanvas-body');
+
+                        if (!sidebar || !offcanvasBody) {
+                            return;
+                        }
+
+                        if (window.innerWidth < 992) {
+                            if (!sidebar._originalParent) {
+                                sidebar._originalParent = sidebar.parentNode;
+                                sidebar._originalNextSibling = sidebar.nextElementSibling;
+                            }
+
+                            if (sidebar.parentNode !== offcanvasBody) {
+                                offcanvasBody.appendChild(sidebar);
+                                sidebar.classList.add('mobile-offcanvas-sidebar');
+                            }
+
+                            return;
+                        }
+
+                        if (sidebar._originalParent && sidebar.parentNode === offcanvasBody) {
+                            if (sidebar._originalNextSibling) {
+                                sidebar._originalParent.insertBefore(sidebar, sidebar._originalNextSibling);
+                            } else {
+                                sidebar._originalParent.appendChild(sidebar);
+                            }
+                            sidebar.classList.remove('mobile-offcanvas-sidebar');
+                        }
+                    }
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        syncPublicSidebarForMobile();
+                        window.addEventListener('resize', syncPublicSidebarForMobile);
+                    });
+
                     // Show user location on demand
                     document.getElementById('locBtn').addEventListener('click', function() {
                         if (!navigator.geolocation) {

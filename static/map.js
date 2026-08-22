@@ -47,15 +47,15 @@ if (map) {
     let selectedAreaLayer = null; // Leaflet layer for currently selected area
 
     const areaColors = {
-        Avereaux: '#ffadad',
-        Wonder: '#ffd6a5',
-        Valdraeth: '#fdffb6',
-        Urdrevan: '#caffbf',
-        Portavas: '#9bf6ff',
-        Hammerstadt: '#a0c4ff',
-        Kairos: '#bdb2ff',
-        Syradonia: '#ffc6ff',
-        Morvalis: '#d3f8e2',
+        Avereaux: '#3e7f62',
+        Wonder: '#0e268f',
+        Valdraeth: '#ff5858',
+        Urdrevan: '#8f7558',
+        Portavas: '#60a897',
+        Hammerstadt: '#863672',
+        Kairos: '#d9d4b9',
+        Syradonia: '#394447',
+        Morvalis: '#f8aa22',
         Crew: '#e0e0e0',
         Guilds: '#f1c0e8',
         Traders: '#f9f871',
@@ -383,9 +383,6 @@ if (map) {
     makeTentDraggable(tentLayer);
 });
 
-
-
-//Test
 let placingTent = false;
 let ghostTent = null;
 let tentData = null;
@@ -1243,7 +1240,7 @@ function buildTentSidebar(searchTerm = "") {
             let html = `
                 <div class="mb-2">
                     <button
-                        class="btn btn-toggle w-100 text-start"
+                        class="btn text-light btn-toggle w-100 text-start"
                         data-bs-toggle="collapse"
                         data-bs-target="#${collapseId}">
                         ${area}
@@ -1260,7 +1257,7 @@ function buildTentSidebar(searchTerm = "") {
                     tent.longitude !== null;
 
                 html += `
-                    <div class="list-group-item">
+                    <div class="list-group-item text-light bg-dark">
                         <div>
                             <strong>${tent.group_name}</strong>
                             <br>
@@ -1537,9 +1534,9 @@ buildTentSidebar = function(searchTerm = "") {
         const collapseId = `area-${area.replace(/\s+/g, "-")}`;
 
         let html = `
-            <div class="mb-2">
+            <div class="mb-2" text-light bg-dark>
                 <button
-                    class="btn btn-toggle w-100 text-start"
+                    class="btn btn-toggle w-100 text-start text-light bg-dark"
                     data-bs-toggle="collapse"
                     data-bs-target="#${collapseId}">
                     ${area}
@@ -1553,7 +1550,7 @@ buildTentSidebar = function(searchTerm = "") {
             const onMap = tent.latitude !== null && tent.longitude !== null;
 
             html += `
-                <div class="list-group-item">
+                <div class="list-group-item text-light bg-dark">
                     <div>
                         <strong>${tent.group_name}</strong>
                         <br>
